@@ -5,7 +5,7 @@ const API = axios.create({
 baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
   headers: { 'Content-Type': 'application/json' }
 });
-
+//new line
 console.log('API URL:', process.env.REACT_APP_API_URL);
 // Attach token automatically
 API.interceptors.request.use((config) => {
