@@ -2,11 +2,11 @@ import axios from 'axios';
 
 const API = axios.create({
   // Change this line ↓
-baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+baseURL: import.meta.env.VITE_API_URL,
   headers: { 'Content-Type': 'application/json' }
 });
 
-
+console.log('API URL:', import.meta.env.VITE_API_URL);
 // Attach token automatically
 API.interceptors.request.use((config) => {
   const teacher = JSON.parse(localStorage.getItem('teacher') || 'null');
