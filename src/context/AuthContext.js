@@ -17,12 +17,12 @@ export const AuthProvider = ({ children }) => {
 
   const loginTeacher = (data) => {
     setTeacher(data);
-    localStorage.setItem('teacher', JSON.stringify(data));
+    sessionStorage.setItem('teacher', JSON.stringify(data));
   };
 
   const logoutTeacher = () => {
     setTeacher(null);
-    localStorage.removeItem('teacher');
+    sessionStorage.removeItem('teacher');
   };
 
   const loginStudent = (data) => {
