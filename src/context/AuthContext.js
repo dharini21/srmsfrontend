@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedTeacher = localStorage.getItem('teacher');
+    const storedTeacher = sessionStorage.getItem('teacher');
     const storedStudent = sessionStorage.getItem('student');
     if (storedTeacher) setTeacher(JSON.parse(storedTeacher));
     if (storedStudent) setStudent(JSON.parse(storedStudent));
