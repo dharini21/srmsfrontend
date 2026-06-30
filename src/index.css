@@ -57,6 +57,7 @@ body {
   margin-left: var(--sidebar-width);
   flex: 1;
   min-height: 100vh;
+  min-width: 0;
 }
 
 .topbar {
@@ -71,6 +72,51 @@ body {
   top: 0;
   z-index: 50;
   box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  gap: 12px;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.topbar-title {
+  font-weight: 600;
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar-date {
+  font-size: 13px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.menu-toggle {
+  display: none;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  font-size: 17px;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: var(--text-primary);
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,0.55);
+  z-index: 99;
 }
 
 .page-content {
@@ -81,6 +127,23 @@ body {
 .sidebar-header {
   padding: 20px 20px 16px;
   border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sidebar-close {
+  display: none;
+  background: rgba(255,255,255,0.08);
+  border: none;
+  color: rgba(255,255,255,0.7);
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  flex-shrink: 0;
 }
 
 .sidebar-brand {
@@ -235,6 +298,30 @@ body {
   font-size: 13px;
   color: var(--text-secondary);
   margin-top: 3px;
+}
+
+/* Generic responsive layout grids (replace inline two-column styles) */
+.split-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 20px;
+  align-items: start;
+}
+
+.split-layout.wide-aside {
+  grid-template-columns: 1fr 320px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.sticky-aside {
+  position: sticky;
+  top: 88px;
 }
 
 /* Buttons */
@@ -434,11 +521,13 @@ tbody td {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .search-input-wrap {
   position: relative;
   flex: 1;
+  min-width: 180px;
 }
 
 .search-icon {
@@ -705,21 +794,85 @@ tbody td {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+
+/* Tablet and below: sidebar becomes an off-canvas drawer */
+@media (max-width: 1024px) {
   .sidebar {
     transform: translateX(-100%);
+    box-shadow: 0 0 40px rgba(0,0,0,0.3);
   }
-  
+
   .sidebar.open {
     transform: translateX(0);
   }
-  
+
+  .sidebar-overlay {
+    display: block;
+  }
+
   .main-content {
     margin-left: 0;
   }
-  
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  .sidebar-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .split-layout,
+  .split-layout.wide-aside {
+    grid-template-columns: 1fr;
+  }
+
+  .sticky-aside {
+    position: static;
+  }
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .stat-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
   .page-content {
     padding: 16px;
+  }
+
+  .topbar {
+    padding: 0 14px;
+  }
+
+  .topbar-date {
+    display: none;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .page-header > *:last-child {
+    width: 100%;
+  }
+
+  .page-header a.btn,
+  .page-header button.btn {
+    width: 100%;
+    justify-content: center;
   }
 
   .form-grid {
@@ -728,6 +881,22 @@ tbody td {
 
   .stat-grid {
     grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .stat-card {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .stat-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
+  }
+
+  .stat-info h3 {
+    font-size: 20px;
   }
 
   .result-summary {
@@ -742,8 +911,66 @@ tbody td {
     padding: 20px 16px;
   }
 
+  .marksheet-header {
+    padding: 22px 18px;
+  }
+
+  .student-info-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .card-header {
+    padding: 16px 18px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .card-body {
+    padding: 18px;
+  }
+
+  .search-bar {
+    flex-direction: column;
+  }
+
+  .search-bar select.form-control,
+  .search-bar input.form-control {
+    max-width: 100% !important;
+  }
+
+  table {
+    font-size: 12.5px;
+  }
+
+  thead th,
+  tbody td {
+    padding: 10px 12px;
+  }
+
+  .modal-box {
+    max-width: 100%;
+    margin: 0 8px;
+  }
+
+  .auth-page {
+    padding: 16px;
+  }
+
+  .page-title {
+    font-size: 19px;
+  }
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+  .stat-grid,
+  .result-summary,
   .student-info-grid {
     grid-template-columns: 1fr;
+  }
+
+  .brand-text {
+    font-size: 13px;
   }
 }
 
