@@ -59,7 +59,7 @@ const Dashboard = () => {
             ))}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+          <div className="dashboard-grid">
             <div className="card">
               <div className="card-header">
                 <span className="card-title">📋 Recent Results</span>
