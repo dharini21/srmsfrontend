@@ -9,7 +9,7 @@ baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
 console.log('API URL:', process.env.REACT_APP_API_URL);
 // Attach token automatically
 API.interceptors.request.use((config) => {
-  const teacher = JSON.parse(localStorage.getItem('teacher') || 'null');
+  const teacher = JSON.parse(sessionStorage.getItem('teacher') || 'null');
   if (teacher?.token) {
     config.headers.Authorization = `Bearer ${teacher.token}`;
   }
