@@ -1,37 +1,49 @@
-import Sidebar from './Sidebar';
-import { useLocation } from 'react-router-dom';
+import { createContext, useContext, useState, useEffect } from 'react';
 
-const pageTitles = {
-  '/teacher/dashboard': 'Dashboard',
-  '/students': 'Students',
-  '/add-student': 'Add Student',
-  '/subjects': 'Subjects',
-  '/results/add': 'Add Result',
-  '/results/view': 'View Results',
-};
+const AuthContext = createContext(null);
 
-const TeacherLayout = ({ children }) => {
-  const location = useLocation();
-  const title = pageTitles[location.pathname] || 'SRMS';
+export const AuthProvider = ({ children }) => {
+  const [teacher, setTeacher] = useState(null);
+  const [student, setStudent] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const storedTeacher = sessionStorage.getItem('teacher');
+    const storedStudent = sessionStorage.getItem('student');
+    if (storedTeacher) setTeacher(JSON.parse(storedTeacher));
+    if (storedStudent) setStudent(JSON.parse(storedStudent));
+    setLoading(false);
+  }, []);
+
+  const loginTeacher = (data) => {
+    setTeacher(data);
+    sessionStorage.setItem('teacher', JSON.stringify(data));
+  };
+
+  const logoutTeacher = () => {
+    setTeacher(null);
+    sessionStorage.removeItem('teacher');
+  };
+
+  const loginStudent = (data) => {
+    setStudent(data);
+    sessionStorage.setItem('student', JSON.stringify(data));
+  };
+
+  const logoutStudent = () => {
+    setStudent(null);
+    sessionStorage.removeItem('student');
+  };
 
   return (
-    <div className="layout">
-      <Sidebar />
-      <div className="main-content">
-        <header className="topbar">
-          <div>
-            <div style={{ fontWeight: 600, fontSize: 15 }}>{title}</div>
-          </div>
-          <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
-            {new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-          </div>
-        </header>
-        <main className="page-content">
-          {children}
-        </main>
-      </div>
-    </div>
+    <AuthContext.Provider value={{
+      teacher, student, loading,
+      loginTeacher, logoutTeacher,
+      loginStudent, logoutStudent
+    }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 
-export default TeacherLayout;
+export const useAuth = () => useContext(AuthContext);
