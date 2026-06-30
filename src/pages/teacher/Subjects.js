@@ -99,7 +99,7 @@ const Subjects = () => {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 20 }}>
+      <div className="split-layout wide-aside">
         <div>
           {/* Class filter tabs */}
           <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
@@ -161,7 +161,7 @@ const Subjects = () => {
 
         {/* Add Subject Form */}
         <div>
-          <div className="card" style={{ position: 'sticky', top: 88 }}>
+          <div className="card sticky-aside">
             <div className="card-header">
               <span className="card-title">➕ Add Subject</span>
             </div>
