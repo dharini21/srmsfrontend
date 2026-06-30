@@ -82,7 +82,7 @@ const AddResult = () => {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: 20 }}>
+      <div className="split-layout">
         <div>
           <div className="card">
             <div className="card-body">
@@ -103,7 +103,7 @@ const AddResult = () => {
                 {selectedStudent && (
                   <div style={{
                     padding: '12px 16px', background: '#f0f9ff', borderRadius: 8,
-                    marginBottom: 18, display: 'flex', gap: 20
+                    marginBottom: 18, display: 'flex', gap: 20, flexWrap: 'wrap'
                   }}>
                     <div><span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Name</span>
                       <div style={{ fontWeight: 600 }}>{selectedStudent.name}</div></div>
@@ -143,7 +143,7 @@ const AddResult = () => {
                   <div style={{
                     padding: '14px 18px', borderRadius: 8, marginBottom: 18,
                     background: preview.grade === 'Fail' ? '#fee2e2' : '#d1fae5',
-                    display: 'flex', gap: 24, alignItems: 'center'
+                    display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap'
                   }}>
                     <div>
                       <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Marks</div>
