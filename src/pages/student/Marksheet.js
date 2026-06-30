@@ -61,16 +61,17 @@ const Marksheet = () => {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f1f5f9', padding: '20px' }}>
+    <div style={{ minHeight: '100vh', background: '#f1f5f9', padding: 'clamp(12px, 4vw, 20px)' }}>
       {/* Top bar */}
       <div style={{
         maxWidth: 760, margin: '0 auto 20px',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        flexWrap: 'wrap', gap: 12
       }}>
         <div style={{ fontWeight: 600, fontSize: 15, color: '#0f172a' }}>
           📋 My Marksheet
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {!error && (
             <>
               <button className="btn btn-outline btn-sm" onClick={handlePrint}>🖨️ Print</button>
