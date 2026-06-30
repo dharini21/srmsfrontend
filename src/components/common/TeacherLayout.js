@@ -1,49 +1,59 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import Sidebar from './Sidebar';
+import { useLocation } from 'react-router-dom';
 
-const AuthContext = createContext(null);
+const pageTitles = {
+  '/teacher/dashboard': 'Dashboard',
+  '/students': 'Students',
+  '/add-student': 'Add Student',
+  '/subjects': 'Subjects',
+  '/results/add': 'Add Result',
+  '/results/view': 'View Results',
+};
 
-export const AuthProvider = ({ children }) => {
-  const [teacher, setTeacher] = useState(null);
-  const [student, setStudent] = useState(null);
-  const [loading, setLoading] = useState(true);
+const TeacherLayout = ({ children }) => {
+  const location = useLocation();
+  const title = pageTitles[location.pathname] || 'SRMS';
+  const [menuOpen, setMenuOpen] = useState(false);
 
+  // Close the mobile menu whenever the route changes
   useEffect(() => {
-    const storedTeacher = sessionStorage.getItem('teacher');
-    const storedStudent = sessionStorage.getItem('student');
-    if (storedTeacher) setTeacher(JSON.parse(storedTeacher));
-    if (storedStudent) setStudent(JSON.parse(storedStudent));
-    setLoading(false);
-  }, []);
+    setMenuOpen(false);
+  }, [location.pathname]);
 
-  const loginTeacher = (data) => {
-    setTeacher(data);
-    sessionStorage.setItem('teacher', JSON.stringify(data));
-  };
-
-  const logoutTeacher = () => {
-    setTeacher(null);
-    sessionStorage.removeItem('teacher');
-  };
-
-  const loginStudent = (data) => {
-    setStudent(data);
-    sessionStorage.setItem('student', JSON.stringify(data));
-  };
-
-  const logoutStudent = () => {
-    setStudent(null);
-    sessionStorage.removeItem('student');
-  };
+  // Lock body scroll while the mobile sidebar is open
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
 
   return (
-    <AuthContext.Provider value={{
-      teacher, student, loading,
-      loginTeacher, logoutTeacher,
-      loginStudent, logoutStudent
-    }}>
-      {children}
-    </AuthContext.Provider>
+    <div className="layout">
+      <Sidebar isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+      {menuOpen && <div className="sidebar-overlay" onClick={() => setMenuOpen(false)} />}
+
+      <div className="main-content">
+        <header className="topbar">
+          <div className="topbar-left">
+            <button
+              className="menu-toggle"
+              aria-label="Toggle menu"
+              onClick={() => setMenuOpen((o) => !o)}
+            >
+              ☰
+            </button>
+            <div className="topbar-title">{title}</div>
+          </div>
+          <div className="topbar-date">
+            {new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+          </div>
+        </header>
+        <main className="page-content">
+          {children}
+        </main>
+      </div>
+    </div>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export default TeacherLayout;
