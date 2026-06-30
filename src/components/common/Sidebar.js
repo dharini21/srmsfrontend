@@ -11,7 +11,7 @@ const navItems = [
   { to: '/results/view', label: 'View Results', icon: '📋' },
 ];
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
   const { teacher, logoutTeacher } = useAuth();
   const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar${isOpen ? ' open' : ''}`}>
       <div className="sidebar-header">
         <div className="sidebar-brand">
           <div className="brand-icon">🎓</div>
@@ -31,6 +31,7 @@ const Sidebar = () => {
             <span>Student Result System</span>
           </div>
         </div>
+        <button className="sidebar-close" aria-label="Close menu" onClick={onClose}>✕</button>
       </div>
 
       <nav className="nav-section">
@@ -40,6 +41,7 @@ const Sidebar = () => {
             key={item.to}
             to={item.to}
             className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}
+            onClick={onClose}
           >
             <span className="icon">{item.icon}</span>
             {item.label}
